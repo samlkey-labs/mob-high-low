@@ -34,11 +34,17 @@ jobs:
           cache: npm
           cache-dependency-path: FRONTEND/package-lock.json
 
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      # Build for the path Pages actually serves from (e.g. /mob-high-low/, or / on a custom
+      # domain) rather than the base hard-coded in vite.config.js for local dev
       - name: Install and build
         working-directory: ./FRONTEND
         run: |
           npm ci
-          npm run build
+          npm run build -- --base "${{ steps.pages.outputs.base_path }}/"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
