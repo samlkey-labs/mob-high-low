@@ -1,21 +1,4 @@
-version: '3.8'
-
 services:
-  backend:
-    build:
-      context: ./BACKEND
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./BACKEND:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development
-    networks:
-      - app-network
-    restart: unless-stopped
-
   frontend:
     build:
       context: ./FRONTEND
@@ -27,12 +10,4 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
-    networks:
-      - app-network
-    depends_on:
-      - backend
     restart: unless-stopped
-
-networks:
-  app-network:
-    driver: bridge 

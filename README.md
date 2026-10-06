@@ -3,7 +3,7 @@
 ![Landing Screenshot](./mdScreenshot.png)
 ![Game Screenshot](./gameScreenshot.png)
 
-This project contains both a backend Express.js API and a frontend Vite + React application, configured to run in Docker containers with hot reload enabled.
+A Vite + React higher/lower game for OSRS monster combat levels, hosted on GitHub Pages. Monster data is scraped from the OSRS wiki ahead of time into a static dataset, so there is no backend. The frontend runs in a Docker container with hot reload enabled.
 
 ## Prerequisites
 
@@ -12,42 +12,26 @@ This project contains both a backend Express.js API and a frontend Vite + React 
 
 ## Quick Start
 
-1. **Build and start the containers:**
+1. **Build and start the container:**
    ```bash
    docker-compose up --build
    ```
 
-2. **Access the applications:**
-   - Frontend (React + Vite): http://localhost:5173
-   - Backend (Express.js API): http://localhost:3000
+2. **Open the game:** http://localhost:5173/MobHighLow/
 
-3. **Stop the containers:**
+3. **Stop the container:**
    ```bash
    docker-compose down
    ```
 
 ## Development with Hot Reload
 
-Both services are configured with hot reload enabled:
-
-- **Backend**: Uses nodemon to automatically restart the server when files change
-- **Frontend**: Uses Vite's built-in hot module replacement (HMR)
-
-### Making Changes
-
-1. Edit files in the `BACKEND/` or `FRONTEND/` directories
-2. Changes will automatically trigger hot reload in the respective containers
-3. No need to restart containers for code changes
+The frontend uses Vite's built-in hot module replacement (HMR). Edit files in `FRONTEND/` and changes reload automatically, with no need to restart the container.
 
 ## Container Management
 
 ### View logs
 ```bash
-# All services
-docker-compose logs
-
-# Specific service
-docker-compose logs backend
 docker-compose logs frontend
 ```
 
@@ -66,37 +50,47 @@ docker-compose down
 docker-compose up -d
 ```
 
-## API Endpoints
-
-The backend API is available at `http://localhost:3000`:
-
-- `GET /api/combat-level?mobName=<monster_name>` - Fetch combat level for a monster
-
 ## Project Structure
 
 ```
 MobHighLow/
-├── BACKEND/           # Express.js API
-│   ├── index.js
-│   ├── package.json
-│   └── Dockerfile
 ├── FRONTEND/          # Vite + React app
 │   ├── src/
+│   ├── public/data/mobs.json  # Generated mob dataset (committed)
 │   ├── package.json
 │   ├── vite.config.js
 │   └── Dockerfile
-├── docker-compose.yml # Multi-container orchestration
+├── SCRAPER/           # Builds mobs.json from the OSRS wiki
+├── docker-compose.yml # Local dev container
 └── README.md
 ```
+
+## Mob Dataset
+
+The game reads its monsters from `FRONTEND/public/data/mobs.json`, a static file served alongside the frontend. `SCRAPER/` generates it from the OSRS wiki's structured `infobox_monster` data:
+
+```bash
+cd SCRAPER
+npm install
+npm test
+npm start
+```
+
+Colours are cached from the previous dataset, so only new images are downloaded. The file is left untouched when nothing has changed.
+
+### Workflows
+
+- `.github/workflows/scrape.yml` runs weekly (or manually from the Actions tab), scrapes the wiki, and opens a PR if the dataset changed.
+- `.github/workflows/pages.yml` builds and deploys the frontend to GitHub Pages on pushes to `master` that touch `FRONTEND/`. It never scrapes.
 
 ## Troubleshooting
 
 ### Port conflicts
-If ports 3000 or 5173 are already in use, modify the port mappings in `docker-compose.yml`:
+If port 5173 is already in use, modify the port mapping in `docker-compose.yml`:
 
 ```yaml
 ports:
-  - "3001:3000"  # Map host port 3001 to container port 3000
+  - "5174:5173"  # Map host port 5174 to container port 5173
 ```
 
 ### Permission issues

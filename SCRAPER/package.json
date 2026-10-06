@@ -1,0 +1,17 @@
+{
+  "name": "scraper",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Builds the MobHighLow monster dataset from the OSRS wiki",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "colorthief": "^2.7.0"
+  }
+}

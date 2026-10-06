@@ -1,0 +1,15 @@
+[
+    { "page_name": "Goblin", "image": ["File:Goblin (level 5).png"], "page_name_sub": "Goblin#Level 5", "combat_level": 5, "version_anchor": "Level 5" },
+    { "page_name": "Goblin", "image": ["File:Goblin.png"], "page_name_sub": "Goblin#Level 2", "combat_level": 2, "version_anchor": "Level 2" },
+    { "page_name": "Goblin", "image": ["File:Goblin (armed).png"], "page_name_sub": "Goblin#Level 2 (armed)", "combat_level": 2, "version_anchor": "Level 2 (armed)" },
+    { "page_name": "Goblin", "image": ["File:Goblin (level 12).png"], "page_name_sub": "Goblin#Level 12 (unused 1)", "combat_level": 12, "version_anchor": "Level 12 (unused 1)" },
+    { "page_name": "Fortress Guard", "image": ["File:Fortress Guard (historical v3).png"], "page_name_sub": "Fortress Guard", "combat_level": 20 },
+    { "page_name": "Fortress Guard", "image": ["File:Fortress Guard.png"], "page_name_sub": "Fortress Guard", "combat_level": 20 },
+    { "page_name": "Ghoul", "image": ["File:Ghoul.png"], "page_name_sub": "Ghoul#Level 70 (Temple Trekking)", "combat_level": 70, "version_anchor": "Level 70 (Temple Trekking)" },
+    { "page_name": "Mithril dragon", "image": ["File:Mithril dragon.png"], "page_name_sub": "Mithril dragon", "combat_level": 304 },
+    { "page_name": "The Maiden of Sugadinti", "image": ["File:The Maiden of Sugadinti (70% health).png"], "page_name_sub": "The Maiden of Sugadinti#70% health", "combat_level": 940, "version_anchor": "70% health" },
+    { "page_name": "Solus Dellagar", "image": ["File:Solus Dellagar.png"], "page_name_sub": "Solus Dellagar" },
+    { "page_name": "Zero hero", "image": ["File:Zero hero.png"], "page_name_sub": "Zero hero", "combat_level": 0 },
+    { "page_name": "Goblin raider", "page_name_sub": "Goblin raider#Level 30", "combat_level": 30, "version_anchor": "Level 30" },
+    { "page_name": "RuneScape:Templates", "page_name_sub": "RuneScape:Templates", "image": ["File:Template.png"], "combat_level": 1 }
+]
