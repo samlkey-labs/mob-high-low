@@ -1,0 +1,55 @@
+# Refreshes FRONTEND/public/data/mobs.json from the OSRS wiki and opens a PR when it changes.
+# Merging that PR triggers pages.yml, which deploys the new data. Deploys never scrape.
+
+name: Update mob dataset
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: scrape
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+          cache-dependency-path: SCRAPER/package-lock.json
+
+      - name: Install and test scraper
+        working-directory: ./SCRAPER
+        run: |
+          npm ci
+          npm test
+
+      - name: Scrape wiki
+        working-directory: ./SCRAPER
+        run: npm start -- --summary "$RUNNER_TEMP/summary.md"
+
+      - name: Open or update pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          # A fine-grained PAT (Contents + Pull requests: read/write on this repo) is used when set,
+          # since the default token can't open PRs if "Allow GitHub Actions to create and approve
+          # pull requests" is disabled by the owning org
+          token: ${{ secrets.SCRAPER_PR_TOKEN || github.token }}
+          branch: bot/update-mob-dataset
+          delete-branch: true
+          add-paths: FRONTEND/public/data/mobs.json
+          commit-message: Update mob dataset from OSRS wiki
+          title: Update mob dataset from OSRS wiki
+          body-path: ${{ runner.temp }}/summary.md
+          labels: dataset

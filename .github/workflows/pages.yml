@@ -1,0 +1,57 @@
+# Builds the frontend (including the committed mob dataset) and deploys it to GitHub Pages.
+# This never touches the wiki; the dataset is refreshed separately by scrape.yml.
+
+name: Deploy frontend to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'FRONTEND/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+          cache-dependency-path: FRONTEND/package-lock.json
+
+      - name: Install and build
+        working-directory: ./FRONTEND
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: FRONTEND/dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
